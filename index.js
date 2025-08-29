@@ -35,13 +35,20 @@ function displayBooks () {
     for (let i=0; i<myLibrary.length; i++){
         const content = document.createElement("div");
         let book = myLibrary[i];
+
+        content.setAttribute("data", book.UUID);
+        console.log(content);
         content.textContent = `${book.title} by ${book.author}, ${book.pages} pages, ${book.read?"read":"not read yet"}, ${book.UUID}`;
+
         let buttonRemove = document.createElement("button");
         buttonRemove.style.width = "100px"
         buttonRemove.style.height = "20px"
         buttonRemove.textContent = "Remove book"
+        /*remove the library record for the book and the dom representation (div) 
+        by looking up UUID from the button that was pressed on our DIV with the UUID
+        stored in the data attribute */
         function onRemove() {
-            console.log("removing from library");
+        
         }
         buttonRemove.addEventListener("click", onRemove, false)
 
