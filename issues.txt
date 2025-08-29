@@ -1,0 +1,23 @@
+add a New Book button that allows the user to input the details for a new book and 
+add it to the library. I'd like to do it with the <dialog> tag and modals.
+We will also need to use event.preventDefault(); to keep the form from being 
+submitted to the server
+
+deletion -- add button on each book display to remove the book from the library. To associate the 
+display DOM object with the books in the data pipeline, on way is to five them data-
+attribute that corresponds to the UID of the respective book object.
+ 
+mark as read -- Add a button on each book’s display to change its read status. To facilitate this you 
+will want to create Book prototype function that toggles a book instance’s read status.
+
+Write a function that loops through the array and displays each book on the page. 
+You can display them in some sort of table, or each on their own “card”. It might 
+help for now to manually add a few books to your array so you can see the display.
+While it might look easier to manipulate the display of the books directly rather 
+than store their data in an array first, from here forward, you should think of 
+these responsibilities separately.
+
+    loop through the elements in library. As long as there is a book there, create a 
+    "library card" div that will include the book data and buttons to mark as read
+    (change the backend representation) and to delete the record (see corresponding
+    ticket in the issue tracker)
