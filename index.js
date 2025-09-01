@@ -8,6 +8,13 @@ function Book (title, author, pages, read) {
     if (!new.target) {
         throw Error("You must use the 'new' operator to call the constructor");
     }
+    Book.prototype.toggleReadStatus = function (){
+        if (this.read === "read") {
+            this.read = "not read"
+        } else if (this.read === "not read") {
+            this.read = "read";
+        }
+    }
     this.title = title;
     this.author = author;
     this.pages = pages;
@@ -20,9 +27,10 @@ function Book (title, author, pages, read) {
 
 function addBookToLibrary(title, author, pages, read){
     let book = new Book(title, author, pages, read);
-    console.log(book.UUID);
+    //console.table(book);
     myLibrary.push(book);
     myLibrary.sort((a,b)=> a.pages>b.pages?1:-1 )
+    return book;
 }
 
 addBookToLibrary("Lord of the Rings: The Two Towers", "J.R.R. Tolkien", "352 p.", "read")
@@ -32,30 +40,14 @@ addBookToLibrary("The Hobbit, or To There and Back", "J.R.R. Tolkien","310 p.", 
 
 
 
+function displayBook(book) {
+    let container = document.getElementById("bookDisplay");
+    const content = document.createElement("div");
 
-function displayBooks () {
-    const container = document.getElementById("bookDisplay")
-    for (let i=0; i<myLibrary.length; i++){
-        const content = document.createElement("div");
-        let book = myLibrary[i];
-
-        content.setAttribute("data", book.UUID);
-        console.log(content);
-        content.textContent = `${book.title} by ${book.author}, ${book.pages} pages, ${book.read?"read":"not read yet"}, ${book.UUID}`;
-
-        /*remove the library record for the book and the dom representation (div) 
-        by looking up UUID from the div with the UUID stored in the data attribute */
-        function onRemoveBook() {
-            let j = myLibrary.findIndex(function(book) {
-                console.log(content.getAttribute("data"))
-                return book.UUID === content.getAttribute("data");
-            })
-            console.log(j)
-            myLibrary.splice(j,1)
-            console.table(myLibrary)
-            console.log(content)
-            content.remove();
-        }
+    content.setAttribute("data", book.UUID);
+    //console.log(content);
+    function updateContent(content){
+        content.textContent = `${book.title} by ${book.author}, ${book.pages} pages, ${book.read}, ${book.UUID}`;
 
         let buttonRemove = document.createElement("button");
         buttonRemove.style.width = "100px"
@@ -67,12 +59,63 @@ function displayBooks () {
         buttonRead.style.width = "100px"
         buttonRead.style.height = "20px"
         buttonRead.textContent = "Mark as read"
-
+        buttonRead.addEventListener("click", onToggleAsRead, false)
+        
         content.appendChild(buttonRemove)
         content.appendChild(buttonRead)
-        container.appendChild(content);
+    }
+    updateContent(content)
+    /*remove the library record for the book and the dom representation (div) 
+    by looking up UUID from the div with the UUID stored in the data attribute */
+    function onRemoveBook() {
+        let j = myLibrary.findIndex(function(book) {
+            //console.log(content.getAttribute("data"))
+            return book.UUID === content.getAttribute("data");
+        })
+        //console.log(j)
+        myLibrary.splice(j,1)
+        //console.table(myLibrary)
+        //console.log(content)
+        content.remove();
+    }
+
+    function onToggleAsRead () {
+        let j = myLibrary.findIndex(function(book) {
+            //console.log(content.getAttribute("data"))
+            return book.UUID === content.getAttribute("data");
+        })
+        myLibrary[j].toggleReadStatus();
+        updateContent(content)
+    }
+
+  
+    container.appendChild(content);
+}
+
+function displayLibrary () {
+    const container = document.getElementById("bookDisplay")
+    for (let i=0; i<myLibrary.length; i++){
+        displayBook(myLibrary[i])
     }
 }
 
-displayBooks();
+const form = document.getElementById("submitNewBookForm") 
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const bookTitleInput = document.getElementById("bookTitle")
+    const bookTitle = bookTitleInput.value;
+    const bookAuthorInput = document.getElementById("bookAuthor")
+    const bookAuthor = bookAuthorInput.value;
+    const bookPagesInput = document.getElementById("bookPages")
+    const bookPages = bookPagesInput.value;
+    const isBookReadInput = document.getElementById("isBookRead")
+    const isBookRead = isBookReadInput.checked;
+    let book = addBookToLibrary(bookTitle, bookAuthor, bookPages, isBookRead?"read":"not read");
+    //console.log(isBookRead?"read":"not read")
+    displayBook(book);
+    
+});
+    
+displayLibrary();
+
 console.table(myLibrary)

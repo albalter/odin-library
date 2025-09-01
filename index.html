@@ -11,7 +11,20 @@
     <div id="bookDisplay">
 
     </div>
-    <button>New Book</button>
+    <form id="submitNewBookForm" method="post">
+        <label for="bookTitle">BOOK TITLE</label>
+        <input type="text" id="bookTitle" name="bookTitle" required>
+        <label for="bookAuthor">BOOK AUTHOR</label>
+        <input type="text" id="bookAuthor" name="bookAuthor" required>
+        <label for="bookPages">NUMBER OF PAGES</label>
+        <input type="text" id="bookPages" pattern = "^([1-9]\d*)$" name="bookPages" required>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="isBookRead" name="isBookRead">
+            <label for="isBookRead">IS BOOK READ?</label>
+        </div>
+        <button class="submitNewBook" type="submit">Submit New Book</button>
+    </form>
     <script src="index.js"></script>
 </body>
 </html>
